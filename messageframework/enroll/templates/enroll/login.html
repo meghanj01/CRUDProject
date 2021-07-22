@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Userloginform</title>
+    <link rel="stylesheet" href="{% static 'enroll/css/bootstrap.css' %}">
+  </head>
+
+  <body>
+    <form action="" method="POST">
+      {% csrf_token %}
+    {{form.as_p}}
+    <input type="submit" value="submit" />
+    </form>
+    {% if messages %}
+    {% for message in messages %}
+    <span {% if message.tags %} class="alert-{{message.tags}}" {% endif %}>{{message}}</span>
+    {% endfor %}
+    {% endif%}
+    <script src="{% static 'enroll/js/jquery.js' %}"></script>
+    <script src="{% static 'enroll/js/popper.js' %}"></script>
+    <script src="{% static 'enroll/js/bootstrap.js' %}"></script>
+
+
+  </body>
+</html>
