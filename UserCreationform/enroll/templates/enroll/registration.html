@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>User Regestration</title>
+  </head>
+  <body>
+    <form action="{% url 'login' %}" method="POST">
+
+      {% csrf_token %}
+{{form.as_p}}
+<input type="submit" name="" value="submit" /></form>
+{% if messages %}
+{% for message in messages %}
+{{ message }}
+{% endfor %}
+{% endif %}
+  </body>
+</html>
