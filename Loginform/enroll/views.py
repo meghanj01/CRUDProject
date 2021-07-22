@@ -1,9 +1,10 @@
 from django.shortcuts import render ,HttpResponseRedirect
 #from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .forms import registration ,editUserProfile
+from .forms import registration ,editUserProfile,editAdminProfile
 from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm,SetPasswordForm
 from django.contrib.auth import authenticate ,login ,logout,update_session_auth_hash
+from django.contrib.auth.models import User
 # Create your views here.
 #signup view function
 def signup(request):
@@ -39,14 +40,23 @@ def user_login(request):
 
 def user_profile(request):
     if request.user.is_authenticated:
+        users=None
         if request.method=="POST":
-            fm=editUserProfile(request.POST,instance=request.user)
+            if request.user.is_superuser==True :
+                fm=editAdminProfile(request.POST,instance=request.user)
+                users=User.objects.all()
+            else:
+                fm=editUserProfile(request.POST,instance=request.user)
             if fm.is_valid():
                 fm.save()
                 messages.success(request,"Profile Updated !!!!!")
         else:
-            fm = editUserProfile(instance=request.user)
-        return render(request,'enroll/profile.html',{'name':request.user,'form':fm})
+            if request.user.is_superuser==True :
+                fm = editAdminProfile(instance=request.user)
+                users=User.objects.all()
+            else:
+                fm = editUserProfile(instance=request.user)
+        return render(request,'enroll/profile.html',{'name':request.user,'form':fm,'users':users})
     else:
         return HttpResponseRedirect('/login/')
 
@@ -86,4 +96,14 @@ def user_changepas1(request):
             fm=SetPasswordForm(user=request.user)
         return render(request,'enroll/changepass1.html',{'form':fm})
     else :
+        return HttpResponseRedirect('/login/')
+
+
+def user_details(request,id):
+    if request.user.is_authenticated:
+        if request.user.is_superuser==True :
+            pi=User.objects.get(pk=id)
+            fm=editAdminProfile(instance=pi)
+        return render(request,'enroll/userdetails.html',{'form':fm})
+    else:
         return HttpResponseRedirect('/login/')
