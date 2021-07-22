@@ -29,8 +29,14 @@
   {{fm.label_tag}} {{fm}} {{fm.errors|striptags}}
   <br><br>
   {% endfor %}
-  <input type="submit" name="" value="Save" /></form>
+  <input type="submit" name="" value="Save" />
+</form>
+{% if perms.enroll.delete_blog %}
+<a href="">Delete</a>
 
+  {% else %}
+  <h3>Nodelete permission </h3>
+  {% endif %}
 <a href="{% url 'logout' %}">Logout</a>
 <br>
 <a href="{% url 'changepass' %}">Change password</a>

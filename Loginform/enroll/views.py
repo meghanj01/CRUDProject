@@ -4,14 +4,16 @@ from django.contrib import messages
 from .forms import registration ,editUserProfile,editAdminProfile
 from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm,SetPasswordForm
 from django.contrib.auth import authenticate ,login ,logout,update_session_auth_hash
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,Group
 # Create your views here.
 #signup view function
 def signup(request):
     if request.method=="POST":
         fm=registration(request.POST)
         if fm.is_valid():
-            fm.save()
+            user=fm.save()
+            group =Group.objects.get(name='editior')
+            user.groups.add(group)
             messages.success(request,"Saved successfully !!!")
 
     else:
