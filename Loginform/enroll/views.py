@@ -2,8 +2,8 @@ from django.shortcuts import render ,HttpResponseRedirect
 #from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from .forms import registration
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate ,login ,logout
+from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm,SetPasswordForm
+from django.contrib.auth import authenticate ,login ,logout,update_session_auth_hash
 # Create your views here.
 #signup view function
 def signup(request):
@@ -46,3 +46,37 @@ def user_profile(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/login/')
+
+# change password with old password
+def user_changepas(request):
+    if request.user.is_authenticated:
+        if request.method=="POST":
+            fm=PasswordChangeForm(user=request.user,data=request.POST)
+            if fm.is_valid():
+                fm.save()
+                update_session_auth_hash(request,fm.user)
+                messages.success(request,'Password Changed Successfully')
+                return HttpResponseRedirect('/profile/')
+        else:
+            fm=PasswordChangeForm(user=request.user)
+        return render(request,'enroll/changepassword.html',{'form':fm})
+    else :
+        return HttpResponseRedirect('/login/')
+
+
+
+# change password without old password
+def user_changepas1(request):
+    if request.user.is_authenticated:
+        if request.method=="POST":
+            fm=SetPasswordForm(user=request.user,data=request.POST)
+            if fm.is_valid():
+                fm.save()
+                update_session_auth_hash(request,fm.user)
+                messages.success(request,'Password Changed Successfully')
+                return HttpResponseRedirect('/profile/')
+        else:
+            fm=SetPasswordForm(user=request.user)
+        return render(request,'enroll/changepass1.html',{'form':fm})
+    else :
+        return HttpResponseRedirect('/login/')
