@@ -1,7 +1,7 @@
 from django.shortcuts import render ,HttpResponseRedirect
 #from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .forms import registration
+from .forms import registration ,editUserProfile
 from django.contrib.auth.forms import AuthenticationForm,PasswordChangeForm,SetPasswordForm
 from django.contrib.auth import authenticate ,login ,logout,update_session_auth_hash
 # Create your views here.
@@ -39,7 +39,14 @@ def user_login(request):
 
 def user_profile(request):
     if request.user.is_authenticated:
-        return render(request,'enroll/profile.html',{'name':request.user})
+        if request.method=="POST":
+            fm=editUserProfile(request.POST,instance=request.user)
+            if fm.is_valid():
+                fm.save()
+                messages.success(request,"Profile Updated !!!!!")
+        else:
+            fm = editUserProfile(instance=request.user)
+        return render(request,'enroll/profile.html',{'name':request.user,'form':fm})
     else:
         return HttpResponseRedirect('/login/')
 
