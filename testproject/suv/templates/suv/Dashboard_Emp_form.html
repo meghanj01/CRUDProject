@@ -1,0 +1,48 @@
+{% extends 'suv/base.html' %}
+
+{% block content %}
+<h1>Employee Dashboard</h1>
+<div class="row">
+    <div class="col-sm-4">
+        <h4 class="text-center text-info">Add new Employee </h4>
+        <form action="{% url 'Dashboard' 'Emp_form' %}" method="POST" novalidate>
+        {% csrf_token %}
+        {{forms.as_p}}
+        <input type="submit" class="btn btn-success" value="ADD">
+    </form>
+    </div>
+    <div class="col-sm-7 offset-1">
+        <h4 class="text-center text-info">Employee information </h4>
+        {% if values %}
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                
+                <th scope="col">Emp ID</th>
+                <th scope="col">Emp Name</th>
+                <th scope="col">Skills </th>
+                <th scope="col">Department ID </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for i in values %}
+              <tr>
+                
+                <th scope="row">{{i.Emp_Id}}</th>
+                <td>{{i.Emp_Name}}</td>
+                <th >{{i.Skills}}</th>
+                <th >{{i.EDept_Id}}</th>
+                <td>
+                    <a href="{% url 'UpdateDashboard' i.Emp_Id 'Emp_form' %}" class="btn btn-warning">Edit</a>
+                    <form action="{% url 'DeleteDashboard' i.Emp_Id 'Emp_form' %}" method="POST" class="d-inline">
+                        {% csrf_token %}
+                    <input type="submit" class="btn btn-danger" value='Delete'>
+                </form>
+                </td>
+                {% endfor %}
+        {% else %}
+        <h4 class="text-center alert alert-danger">NoRecords</h4>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

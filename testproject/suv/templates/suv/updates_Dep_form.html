@@ -1,0 +1,14 @@
+{% extends 'suv/base.html' %}
+{% block content %}
+<div class="row">
+  <div class="col-sm-8 offset-2">
+    <h4 class="alert alert-info">Update Department information</h4>
+    <form action="" method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" class="btn btn-success" value="update">
+      <a href="{% url 'Dashboard' 'Dep_form' %}" class="btn btn-info">Back to Dashboard</a>
+      </form>
+      </div>
+      </div>
+{% endblock content %}
