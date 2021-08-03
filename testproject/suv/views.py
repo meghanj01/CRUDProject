@@ -6,8 +6,7 @@ import re
 # Create your views here.
 def home(request):
     return render(request,'suv/home.html')
-def mock(request):
-    return render(request,'suv/dataview.html')
+
 def add_show(request,table):
     if table== "Dep_form":
         cur_models= Department
@@ -17,79 +16,39 @@ def add_show(request,table):
         cur_forms= Emp_form
 
     if request.method=="POST":
-
         fm=cur_forms(request.POST)
-        #print("*******************************")
-        #print("formobject"+str(fm))
         if fm.is_valid():
                 if table == "Dep_form":
                     print(fm.cleaned_data['Dept_Name'])
                     fm.save()
-                    
-                    # uname=fm.cleaned_data['Dept_Name']
-                    # uid=fm.cleaned_data['Dept_Id']
-                    # ustaff=fm.cleaned_data['Staff_count']
-                    # user=Department(Dept_Name=uname,Dept_Id=uid,Staff_count=ustaff)
                     messages.success(request,"Congratulations !! You added a new department")
                 if table == "Emp_form":
-                    #print(fm.cleaned_data['EDept_Id'].Dept_Id)
-                    fm.save()
-                    # uid=fm.cleaned_data['Emp_Id']
-                    # uname=fm.cleaned_data['Emp_Name']
-                    # uskills=fm.cleaned_data['Skills']
-                    # uemp_dept=fm.cleaned_data['EDept_Id']
-                    
-                    # user=Employee(Emp_Id=uname,Emp_Name=uname,Skills=uskills,EDept_Id=uemp_dept)
-                    messages.success(request,"Congratulations !! You added a new Employee")
+                   fm.save()
+                   messages.success(request,"Congratulations !! You added a new Employee")
     else:
         fm=cur_forms()
-        #print("formobject"+str(fm))
-    # if searchval:
-    #     values=cur_models.objects.filter(Dept_Name=searchval)
-    # else:
-
     values=None
     try :
         print(request.POST.get('searchvalue'))
-
-        #print(re.fullmatch('^[0-9]+$',request.POST.get('searchvalue')))
         if re.fullmatch('^[0-9]+$',str(request.POST.get('searchvalue'))) :
-            print("Reaching here")
-            #print(request.POST.get('searchvalue').value())
             id=request.POST.get('searchvalue')
             values=cur_models.objects.filter(pk=id)
-            print("Reaching out")
-            print(values)
     except AttributeError:
         pass
     if  request.POST.get('DSC')=="DSC"  :
         print("Inside DESC")
         print(values)
-        values=cur_models.objects.order_by('-Dept_Id')
+        values=cur_models.objects.order_by('-Dept_Id') if cur_models==Department else cur_models.objects.order_by('-Emp_Id')
     elif request.POST.get('ASC')=="ASC" and re.fullmatch('^[0-9]+$',request.POST.get('searchvalue'))   :
         print("Inside ASC")
         print(values)
         id=request.POST.get('searchvalue')
         values=cur_models.objects.filter(pk=id)
     elif request.POST.get('ASC')=="ASC" and not (re.fullmatch('^[0-9]+$',request.POST.get('searchvalue')) )  :
-        values=cur_models.objects.order_by('Dept_Id')
-        print(values)
-    print("printing values")
-    print(values)
-    #print( "length of values"+str(len(values)) )
+        values=cur_models.objects.order_by('Dept_Id') if cur_models==Department else cur_models.objects.order_by('Emp_Id')
     if not values :
         values=cur_models.objects.all()
-
-    
-    
-        
-
-    
-       
-    print("**************************8")
-    print(values)
     context={'forms':fm ,'values':values}
-
     return render (request,'suv/Dashboard_'+table+'.html',context)
 
 def delete_date(request,id,table):

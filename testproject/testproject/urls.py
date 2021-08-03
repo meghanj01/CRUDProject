@@ -19,7 +19,6 @@ from suv import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home,name="home"),
-    path('mock',views.mock,name="mock"),
     path('Dashboard/<str:table>/',views.add_show,name='Dashboard'),
     path('UpdateDashboard/<int:id>/<str:table>/',views.update_data,name='UpdateDashboard'),
     path('DeleteDashboard/<int:id>/<str:table>/',views.delete_date,name='DeleteDashboard'),

@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-sm-4">
         <h4 class="text-center text-info">Add new Employee </h4>
-        <form action="{% url 'Dashboard' 'Emp_form'  methods=None %}" method="POST" novalidate>
+        <form action="{% url 'Dashboard' 'Emp_form'  %}" method="POST" novalidate>
         {% csrf_token %}
         {{forms.as_p}}
         <input type="submit" class="btn btn-success" value="ADD">
@@ -45,4 +45,16 @@
         {% endif %}
     </div>
 </div>
+<div class="row">
+  <form action="{% url 'Dashboard' 'Emp_form'  %}" method="POST">
+    {% csrf_token %}
+    
+    <!-- <p>input 1: <input type="search" id="query" name="depnamesearch" placeholder=" depname Search..."></p><br> -->
+       <input name="ASC" type="submit" value="ASC" class="btn btn-warning">
+       
+        <input name="DSC" type="submit" value="DSC" class="btn btn-warning">
+        <input type="text" name="searchvalue" value="enter dept is for search">
+    </form>
+</div> 
+<a href="{% url 'home'  %}" class="btn btn-info">Back to Home</a>
 {% endblock content %}
