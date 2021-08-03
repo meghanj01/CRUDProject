@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-sm-4">
         <h4 class="text-center text-info">Add new Employee </h4>
-        <form action="{% url 'Dashboard' 'Emp_form' %}" method="POST" novalidate>
+        <form action="{% url 'Dashboard' 'Emp_form'  methods=None %}" method="POST" novalidate>
         {% csrf_token %}
         {{forms.as_p}}
         <input type="submit" class="btn btn-success" value="ADD">

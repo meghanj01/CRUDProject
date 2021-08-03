@@ -23,7 +23,7 @@ urlpatterns = [
     path('Dashboard/<str:table>/',views.add_show,name='Dashboard'),
     path('UpdateDashboard/<int:id>/<str:table>/',views.update_data,name='UpdateDashboard'),
     path('DeleteDashboard/<int:id>/<str:table>/',views.delete_date,name='DeleteDashboard'),
-    path('Dashboard/<str:method>/',views.add_show,name='Dashboardsearch'),
+   
   
 
 ]

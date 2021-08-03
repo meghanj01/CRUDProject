@@ -2,13 +2,14 @@ from suv.models import Department, Employee
 from django.shortcuts import render ,HttpResponseRedirect
 from .forms import Dep_form,Emp_form
 from django.contrib import messages
+import re
 # Create your views here.
 def home(request):
     return render(request,'suv/home.html')
 def mock(request):
     return render(request,'suv/dataview.html')
 def add_show(request,table):
-    if table == "Dep_form":
+    if table== "Dep_form":
         cur_models= Department
         cur_forms= Dep_form
     elif table  == "Emp_form":
@@ -46,7 +47,45 @@ def add_show(request,table):
     # if searchval:
     #     values=cur_models.objects.filter(Dept_Name=searchval)
     # else:
-    values=cur_models.objects.all()
+
+    values=None
+    try :
+        print(request.POST.get('searchvalue'))
+
+        #print(re.fullmatch('^[0-9]+$',request.POST.get('searchvalue')))
+        if re.fullmatch('^[0-9]+$',str(request.POST.get('searchvalue'))) :
+            print("Reaching here")
+            #print(request.POST.get('searchvalue').value())
+            id=request.POST.get('searchvalue')
+            values=cur_models.objects.filter(pk=id)
+            print("Reaching out")
+            print(values)
+    except AttributeError:
+        pass
+    if  request.POST.get('DSC')=="DSC"  :
+        print("Inside DESC")
+        print(values)
+        values=cur_models.objects.order_by('-Dept_Id')
+    elif request.POST.get('ASC')=="ASC" and re.fullmatch('^[0-9]+$',request.POST.get('searchvalue'))   :
+        print("Inside ASC")
+        print(values)
+        id=request.POST.get('searchvalue')
+        values=cur_models.objects.filter(pk=id)
+    elif request.POST.get('ASC')=="ASC" and not (re.fullmatch('^[0-9]+$',request.POST.get('searchvalue')) )  :
+        values=cur_models.objects.order_by('Dept_Id')
+        print(values)
+    print("printing values")
+    print(values)
+    #print( "length of values"+str(len(values)) )
+    if not values :
+        values=cur_models.objects.all()
+
+    
+    
+        
+
+    
+       
     print("**************************8")
     print(values)
     context={'forms':fm ,'values':values}

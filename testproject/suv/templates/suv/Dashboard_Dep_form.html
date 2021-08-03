@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-sm-4">
         <h4 class="text-center text-info">Add new Department </h4>
-        <form action="{% url 'Dashboard' 'Dep_form' %}" method="POST" novalidate>
+        <form action="{% url 'Dashboard' table='Dep_form'  %}" method="POST" novalidate>
         {% csrf_token %}
         {{forms.as_p}}
         <input type="submit" class="btn btn-success" value="ADD">
@@ -47,17 +47,15 @@
     </div>
 </div>
  <div class="row">
-  <form action="{% url 'Dashboardsearch' id  %}" method="POST">
-    {% csrf_token %}
-    <input type="search" id="query" name="depnamesearch" placeholder=" depname Search...">
-    <button>Search</button>
-    </form>
-</div> 
-<div class="row">
-  <form action="{% url 'Dashboardsearch' id  %}" method="POST">
+  <form action="{% url 'Dashboard' 'Dep_form'  %}" method="POST">
     {% csrf_token %}
     
-    <button>ASC/DSC</button>
+    <!-- <p>input 1: <input type="search" id="query" name="depnamesearch" placeholder=" depname Search..."></p><br> -->
+       <input name="ASC" type="submit" value="ASC" class="btn btn-warning">
+       
+        <input name="DSC" type="submit" value="DSC" class="btn btn-warning">
+        <input type="text" name="searchvalue" value="enter dept is for search">
     </form>
 </div> 
+
 {% endblock content %}
